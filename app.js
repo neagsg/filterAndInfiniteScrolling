@@ -1,4 +1,6 @@
 const postsContainer = document.querySelector('#posts-container');
+const loaderContainer = document.querySelector('.loader');
+
 let page = 1;
 
 const getPost = async () => {
@@ -23,3 +25,30 @@ const addPostIntoDom = async () => {
 }
 
 addPostIntoDom();
+
+const getNextPosts = () => {
+  page++;
+  addPostIntoDom();
+}
+
+const removeLoader = () => {
+  setTimeout(() => {
+    loaderContainer.classList.remove('show');
+    getNextPosts();
+  }, 1000);
+}
+
+const showLoader = () => {
+  loaderContainer.classList.add('show');
+
+  removeLoader();
+}
+
+window.addEventListener('scroll', () => {
+  const { clientHeight, scrollTop, scrollHeight } = document.documentElement;
+  const isPageBottomAlmostReached = clientHeight + scrollTop >= scrollHeight - 10;
+
+  if (isPageBottomAlmostReached) {
+    showLoader();
+  }
+});
